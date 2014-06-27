@@ -107,42 +107,45 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
                                       scope:(NSString *)scope
                                     success:(void (^)(AFOAuthCredential *credential))success
                                     failure:(void (^)(NSError *error))failure
+                      securityPolicyFactory:(AFSecurityPolicy* (^)())securityPolicyFactory
 {
     NSMutableDictionary *mutableParameters = [NSMutableDictionary dictionary];
     [mutableParameters setObject:kAFOAuthPasswordCredentialsGrantType forKey:@"grant_type"];
     [mutableParameters setObject:kAFOAuthPasswordCredentialsResponseType forKey:@"response_type"];
     [mutableParameters setValue:username forKey:@"username"];
     [mutableParameters setValue:password forKey:@"password"];
-    [mutableParameters setValue:scope forKey:@"scope"];
+    [mutableParameters setValue:scope forKey:@"scope"];]
     NSDictionary *parameters = [NSDictionary dictionaryWithDictionary:mutableParameters];
     
-    [self authenticateUsingOAuthWithURLString:urlString parameters:parameters success:success failure:failure];
+    [self authenticateUsingOAuthWithURLString:urlString parameters:parameters success:success failure:failure securityPolicy: securityPolicyFactory];
 }
 
 - (void)authenticateUsingOAuthWithURLString:(NSString *)urlString
                                       scope:(NSString *)scope
                                     success:(void (^)(AFOAuthCredential *credential))success
                                     failure:(void (^)(NSError *error))failure
+                      securityPolicyFactory:(AFSecurityPolicy* (^)())securityPolicyFactory
 {
     NSMutableDictionary *mutableParameters = [NSMutableDictionary dictionary];
     [mutableParameters setObject:kAFOAuthClientCredentialsGrantType forKey:@"grant_type"];
     [mutableParameters setValue:scope forKey:@"scope"];
     NSDictionary *parameters = [NSDictionary dictionaryWithDictionary:mutableParameters];
     
-    [self authenticateUsingOAuthWithURLString:urlString parameters:parameters success:success failure:failure];
+    [self authenticateUsingOAuthWithURLString:urlString parameters:parameters success:success failure:failure securityPolicy: securityPolicyFactory];
 }
 
 - (void)authenticateUsingOAuthWithURLString:(NSString *)urlString
                                refreshToken:(NSString *)refreshToken
                                     success:(void (^)(AFOAuthCredential *credential))success
                                     failure:(void (^)(NSError *error))failure
+                      securityPolicyFactory:(AFSecurityPolicy* (^)())securityPolicyFactory
 {
     NSMutableDictionary *mutableParameters = [NSMutableDictionary dictionary];
     [mutableParameters setObject:kAFOAuthRefreshGrantType forKey:@"grant_type"];
     [mutableParameters setValue:refreshToken forKey:@"refresh_token"];
     NSDictionary *parameters = [NSDictionary dictionaryWithDictionary:mutableParameters];
     
-    [self authenticateUsingOAuthWithURLString:urlString parameters:parameters success:success failure:failure];
+    [self authenticateUsingOAuthWithURLString:urlString parameters:parameters success:success failure:failure securityPolicy: securityPolicyFactory];
 }
 
 - (void)authenticateUsingOAuthWithURLString:(NSString *)urlString
@@ -150,6 +153,7 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
                                 redirectURI:(NSString *)uri
                                     success:(void (^)(AFOAuthCredential *credential))success
                                     failure:(void (^)(NSError *error))failure
+                      securityPolicyFactory:(AFSecurityPolicy* (^)())securityPolicyFactory
 {
     NSMutableDictionary *mutableParameters = [NSMutableDictionary dictionary];
     [mutableParameters setObject:kAFOAuthCodeGrantType forKey:@"grant_type"];
@@ -157,13 +161,14 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
     [mutableParameters setValue:uri forKey:@"redirect_uri"];
     NSDictionary *parameters = [NSDictionary dictionaryWithDictionary:mutableParameters];
     
-    [self authenticateUsingOAuthWithURLString:urlString parameters:parameters success:success failure:failure];
+    [self authenticateUsingOAuthWithURLString:urlString parameters:parameters success:success failure:failure securityPolicy: securityPolicyFactory];
 }
 
 - (void)authenticateUsingOAuthWithURLString:(NSString *)urlString
                                  parameters:(NSDictionary *)parameters
                                     success:(void (^)(AFOAuthCredential *credential))success
                                     failure:(void (^)(NSError *error))failure
+                      securityPolicyFactory:(AFSecurityPolicy* (^)())securityPolicyFactory
 {
     NSMutableDictionary *mutableParameters = [NSMutableDictionary dictionaryWithDictionary:parameters];
     [mutableParameters setObject:self.clientID forKey:@"client_id"];
@@ -210,6 +215,7 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
             failure(error);
         }
     }];
+    requestOperation.securityPolicy = [securityPolicyFactory];
     [requestOperation start];
 }
 
