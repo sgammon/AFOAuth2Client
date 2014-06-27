@@ -114,10 +114,10 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
     [mutableParameters setObject:kAFOAuthPasswordCredentialsResponseType forKey:@"response_type"];
     [mutableParameters setValue:username forKey:@"username"];
     [mutableParameters setValue:password forKey:@"password"];
-    [mutableParameters setValue:scope forKey:@"scope"];]
+    [mutableParameters setValue:scope forKey:@"scope"];
     NSDictionary *parameters = [NSDictionary dictionaryWithDictionary:mutableParameters];
     
-    [self authenticateUsingOAuthWithURLString:urlString parameters:parameters success:success failure:failure securityPolicy: securityPolicyFactory];
+    [self authenticateUsingOAuthWithURLString:urlString parameters:parameters success:success failure:failure securityPolicyFactory: securityPolicyFactory];
 }
 
 - (void)authenticateUsingOAuthWithURLString:(NSString *)urlString
@@ -131,7 +131,7 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
     [mutableParameters setValue:scope forKey:@"scope"];
     NSDictionary *parameters = [NSDictionary dictionaryWithDictionary:mutableParameters];
     
-    [self authenticateUsingOAuthWithURLString:urlString parameters:parameters success:success failure:failure securityPolicy: securityPolicyFactory];
+    [self authenticateUsingOAuthWithURLString:urlString parameters:parameters success:success failure:failure securityPolicyFactory: securityPolicyFactory];
 }
 
 - (void)authenticateUsingOAuthWithURLString:(NSString *)urlString
@@ -145,7 +145,7 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
     [mutableParameters setValue:refreshToken forKey:@"refresh_token"];
     NSDictionary *parameters = [NSDictionary dictionaryWithDictionary:mutableParameters];
     
-    [self authenticateUsingOAuthWithURLString:urlString parameters:parameters success:success failure:failure securityPolicy: securityPolicyFactory];
+    [self authenticateUsingOAuthWithURLString:urlString parameters:parameters success:success failure:failure securityPolicyFactory: securityPolicyFactory];
 }
 
 - (void)authenticateUsingOAuthWithURLString:(NSString *)urlString
@@ -161,7 +161,7 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
     [mutableParameters setValue:uri forKey:@"redirect_uri"];
     NSDictionary *parameters = [NSDictionary dictionaryWithDictionary:mutableParameters];
     
-    [self authenticateUsingOAuthWithURLString:urlString parameters:parameters success:success failure:failure securityPolicy: securityPolicyFactory];
+    [self authenticateUsingOAuthWithURLString:urlString parameters:parameters success:success failure:failure securityPolicyFactory: securityPolicyFactory];
 }
 
 - (void)authenticateUsingOAuthWithURLString:(NSString *)urlString
@@ -215,7 +215,7 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
             failure(error);
         }
     }];
-    requestOperation.securityPolicy = [securityPolicyFactory];
+    requestOperation.securityPolicy = securityPolicyFactory();
     [requestOperation start];
 }
 

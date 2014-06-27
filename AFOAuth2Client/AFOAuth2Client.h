@@ -165,7 +165,8 @@
 - (void)authenticateUsingOAuthWithURLString:(NSString *)urlString
                                  parameters:(NSDictionary *)parameters
                                     success:(void (^)(AFOAuthCredential *credential))success
-                                    failure:(void (^)(NSError *error))failure;
+                                    failure:(void (^)(NSError *error))failure
+                      securityPolicyFactory:(AFSecurityPolicy* (^)())securityPolicyFactory;
 
 @end
 
